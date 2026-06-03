@@ -1,0 +1,22 @@
+graph TD
+    A[User Access] --> B{index.php: Session Check}
+    B -- YES: User ID exists? --> C[Redirect to Dashboard]
+    B -- NO --> D[Redirect to Login]
+    
+    D --> E{login.php: Already logged in?}
+    E -- YES --> C
+    E -- NO --> F[Show Login Form]
+    
+    F --> G[Form Submission POST]
+    G --> H{Validate: Email & Password filled?}
+    H -- NO --> I[Show Error Message] --> F
+    H -- YES --> J{User::login email, password}
+    
+    J -- Email exists? NO --> K[Return 'No account found'] --> F
+    J -- Email exists? YES --> L{Password matches?}
+    L -- NO --> M[Return 'Incorrect password'] --> F
+    L -- YES --> N[Create Session Variables]
+    
+    N --> O[user_id, name, role, email] --> C
+    
+    P[logout.php: Logout] --> Q[User::logout] --> R[Session Destroy] --> D
